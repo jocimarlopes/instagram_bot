@@ -3,8 +3,8 @@ from monitor import monitor_latest_comments
 from database import init_db
 from random import randint
 
-MIN_CHECK_INTERVAL_SECONDS = 600  # 10 minutos
-MAX_CHECK_INTERVAL_SECONDS = 1800  # 30 minutos
+MIN_CHECK_INTERVAL_SECONDS = 1800  # 30 minutos
+MAX_CHECK_INTERVAL_SECONDS = 3600  # 60 minutos
 
 def main():
     print("🚀 Iniciando o Bot do Instagram com Integração de IA...")
