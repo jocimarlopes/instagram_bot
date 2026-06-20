@@ -1,0 +1,5 @@
+venv
+/venv
+.env
+session.json
+instagram_bot.db
