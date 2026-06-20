@@ -1,9 +1,12 @@
 import time
 import httpx
 from database import ja_foi_processado, salvar_comentario_processado
+from dotenv import dotenv_values
+
+config = dotenv_values(".env")  # config = {"USER": "foo", "EMAIL": "foo@example.org"}
 
 # Configurações da sua IA Local
-API_BASE_URL = "http://192.168.2.159:5000"
+IA_BASE_API = config.get("IA_BASE_API")
 MODELO_ATUAL = None  
 
 def obter_resposta_da_ia(texto_comentario):
@@ -13,7 +16,7 @@ def obter_resposta_da_ia(texto_comentario):
     # 1. Pega o modelo se ainda não estiver definido na memória
     if not MODELO_ATUAL:
         try:
-            response_models = httpx.post(f"{API_BASE_URL}/models", timeout=10.0)
+            response_models = httpx.post(f"{IA_BASE_API}/models", timeout=10.0)
             if response_models.status_code == 200:
                 modelos_disponiveis = response_models.json()
                 if modelos_disponiveis and len(modelos_disponiveis) > 0:
@@ -40,7 +43,7 @@ def obter_resposta_da_ia(texto_comentario):
     try:
         # 3. Conecta no stream de resposta
         with httpx.Client(timeout=120.0) as client:
-            with client.stream("POST", f"{API_BASE_URL}/stream", json=payload) as response:
+            with client.stream("POST", f"{IA_BASE_API}/stream", json=payload) as response:
                 if response.status_code != 200:
                     print(f"❌ Erro na geração de texto: Status {response.status_code}")
                     return None
